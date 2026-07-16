@@ -13,8 +13,11 @@
     "@stripe/react-stripe-js": "^6.7.0",
     "@stripe/stripe-js": "^9.9.0",
     "axios": "^1.18.1",
+    "i18next": "^26.3.6",
+    "lucide-react": "^1.24.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-i18next": "^17.0.10",
     "react-router-dom": "^7.18.1",
     "sass": "^1.101.0"
   },

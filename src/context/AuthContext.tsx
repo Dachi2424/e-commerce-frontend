@@ -40,7 +40,6 @@ type Action =
     logout: () => Promise<void>,
     logoutAll: () => Promise<void>,
     deleteAccount: () => Promise<void>,
-
   }
 
 
