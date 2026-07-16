@@ -1,3 +1,25 @@
+// Add these to index.html <head>:
+// <link rel="preconnect" href="https://fonts.googleapis.com">
+// <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+:root {
+  // ---- Site-wide design tokens ----
+  --color-bg: #FAFBFF;         // Frost White
+  --color-surface: #FFFFFF;    // Paper White
+  --color-primary: #154C79;    // Deep Harbor Blue
+  --color-accent: #2F8FE0;     // Signal Blue
+  --color-text: #16213A;       // Ink Navy
+  --color-muted: #6B7A99;      // Slate Mist
+  --color-border: #E4E9F2;
+  --color-danger: #E0522F;
+
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  --header-height: 76px;
+  --header-height-mobile: 64px;
+}
 
 *{
   margin: 0;
@@ -6,8 +28,12 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
 input, textarea, select, option, button{
   font-size: 16px;
 }
-
-

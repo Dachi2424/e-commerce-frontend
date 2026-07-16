@@ -92,10 +92,9 @@ function reducer(state: AuthState, action: Action): AuthState{
     case ACTIONS.DELETE_ACCOUNT:
       return {...state, error: null, loading: false, user: null}
     default:
-      return state;
+      return  state;
   }
 }
-
 
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
