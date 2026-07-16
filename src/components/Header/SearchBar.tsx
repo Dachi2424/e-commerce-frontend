@@ -10,13 +10,9 @@ type ProductResult = {
   imageUrl: string[]
 }
 
-type Props = {
-  onNavigate?: () => void
-}
-
 const DEBOUNCE_MS = 800
 
-function SearchBar({ onNavigate }: Props) {
+function SearchBar({ onNavigate }: {onNavigate?: () => void}) {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<ProductResult[]>([])
   const [showResults, setShowResults] = useState(false)

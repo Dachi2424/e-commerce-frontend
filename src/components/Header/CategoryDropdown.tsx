@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import {
   ChevronDown,
   ChevronRight,
+  LayoutGrid,
   Smartphone,
   Laptop,
   Tablet,
@@ -82,7 +83,8 @@ function CategoryDropdown({ mobile = false, onNavigate }: Props) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        Categories
+        <LayoutGrid size={16} />
+        <span>Categories</span>
         <ChevronDown
           size={16}
           className={`category-dropdown__chevron ${open ? "category-dropdown__chevron--open" : ""}`}
@@ -90,16 +92,35 @@ function CategoryDropdown({ mobile = false, onNavigate }: Props) {
       </button>
       {open && (
         <div className="category-dropdown__panel">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.value}
-              type="button"
-              className="category-dropdown__item"
-              onClick={() => handleSelect(cat.value)}
-            >
-              {cat.label}
-            </button>
-          ))}
+          <span className="category-dropdown__panel-label">Shop by category</span>
+          <div className="category-dropdown__grid">
+            {CATEGORIES.map((cat) => {
+              const Icon = CATEGORY_ICONS[cat.value]
+              return (
+                <button
+                  key={cat.value}
+                  type="button"
+                  className="category-dropdown__card"
+                  onClick={() => handleSelect(cat.value)}
+                >
+                  <span className="category-dropdown__card-icon">
+                    <Icon size={19} />
+                  </span>
+                  <span className="category-dropdown__card-label">{cat.label}</span>
+                </button>
+              )
+            })}
+          </div>
+          <button
+            type="button"
+            className="category-dropdown__view-all"
+            onClick={() => {
+              navigate("/products")
+              setOpen(false)
+            }}
+          >
+            View all products →
+          </button>
         </div>
       )}
     </div>
