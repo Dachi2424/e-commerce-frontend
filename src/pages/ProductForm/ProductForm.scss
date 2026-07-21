@@ -1,0 +1,327 @@
+.product-form-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: calc(var(--header-height) + 32px) 24px 48px;
+
+  @media (max-width: 900px) {
+    padding: calc(var(--header-height-mobile) + 24px) 16px 32px;
+  }
+}
+
+.product-form-page__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--color-text);
+  margin-bottom: 24px;
+}
+
+.product-form-page__status {
+  font-family: var(--font-body);
+  color: var(--color-muted);
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.product-form__basics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 20px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.product-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  span {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-text);
+  }
+
+  input,
+  select,
+  textarea {
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-text);
+    outline: none;
+    resize: vertical;
+
+    &:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(47, 143, 224, 0.15);
+    }
+  }
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+}
+
+.product-form__image-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.product-form__image-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    flex: 1;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-text);
+    outline: none;
+
+    &:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(47, 143, 224, 0.15);
+    }
+  }
+}
+
+.product-form__image-remove {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  border-radius: 8px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--color-danger);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--color-danger);
+  }
+}
+
+.product-form__add-image-btn {
+  align-self: flex-start;
+  margin-top: 8px;
+  background: none;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-primary);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+}
+
+.product-form__section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.product-form__error {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-danger);
+  background: rgba(224, 82, 47, 0.08);
+  border: 1px solid rgba(224, 82, 47, 0.25);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.product-form__submit {
+  align-self: flex-start;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14.5px;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--color-accent);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// ---- Spec form (generic, category-agnostic) ----
+.spec-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.spec-form__empty {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--color-muted);
+}
+
+.spec-form__group {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+  background: var(--color-surface);
+}
+
+.spec-form__group-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 6px;
+}
+
+.spec-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 8px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.spec-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  span {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  input,
+  select {
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    border-radius: 7px;
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--color-text);
+    outline: none;
+
+    &:focus {
+      border-color: var(--color-accent);
+    }
+  }
+
+  &--checkbox {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--color-primary);
+    }
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  &--boolean-with-text {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    gap: 10px;
+  }
+}
+
+.spec-form__checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  span {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+}
+
+.spec-form__nested-input {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-left: 24px;
+
+  span {
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  input {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    border-radius: 7px;
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--color-text);
+    outline: none;
+
+    &:focus {
+      border-color: var(--color-accent);
+    }
+  }
+}

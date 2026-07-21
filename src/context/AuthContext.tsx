@@ -13,6 +13,7 @@ type AuthState = {
   error: null | string
   loading: boolean
   user: User | null
+  authChecked: boolean
 }
 
 type Action = 
@@ -27,6 +28,7 @@ type Action =
   | { type: "LOG_OUT" }
   | { type: "LOG_OUT_ALL" }
   | { type: "DELETE_ACCOUNT" }
+  | { type: "AUTH_CHECKED" }
 
 
   type AuthContextType = {
@@ -48,7 +50,8 @@ type Action =
 const initialState: AuthState = {
   error: null,
   loading: false,
-  user: null
+  user: null,
+  authChecked: false
 }
 
 
@@ -63,7 +66,8 @@ const ACTIONS = {
   LOG_OUT_ALL: "LOG_OUT_ALL",
   DELETE_ACCOUNT: "DELETE_ACCOUNT",
   SET_LOADING: "SET_LOADING",
-  SET_ERROR: "SET_ERROR"
+  SET_ERROR: "SET_ERROR",
+  AUTH_CHECKED: "AUTH_CHECKED"
 } as const
 
 
@@ -91,6 +95,8 @@ function reducer(state: AuthState, action: Action): AuthState{
       return {...state, error: null, loading: false, user: null}
     case ACTIONS.DELETE_ACCOUNT:
       return {...state, error: null, loading: false, user: null}
+    case ACTIONS.AUTH_CHECKED:
+      return {...state, authChecked: true}
     default:
       return  state;
   }
@@ -109,6 +115,21 @@ function AuthProvider({children} : {children: ReactNode}){
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth`, {withCredentials: true})
       dispatch({type: ACTIONS.GET_INFO, payload: res.data})
     } catch(err: unknown){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth`, {withCredentials: true})
+          dispatch({type: ACTIONS.GET_INFO, payload: res.data})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong"})
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
+
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{
@@ -118,7 +139,9 @@ function AuthProvider({children} : {children: ReactNode}){
   }
 
   useEffect(() => {
-    getUserInfo();
+    getUserInfo().finally(() => {
+      dispatch({type: ACTIONS.AUTH_CHECKED})
+    })
   }, [])
 
   async function refreshToken(){
@@ -166,6 +189,20 @@ function AuthProvider({children} : {children: ReactNode}){
       await axios.patch(`${import.meta.env.VITE_API_URL}/auth/change-password`, {currentPassword, newPassword}, {withCredentials: true})
       dispatch({type: ACTIONS.CHANGE_PASSWORD})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          await axios.patch(`${import.meta.env.VITE_API_URL}/auth/change-password`, {currentPassword, newPassword}, {withCredentials: true})
+          dispatch({type: ACTIONS.CHANGE_PASSWORD})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong"})
+          } else {
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{
@@ -180,6 +217,20 @@ function AuthProvider({children} : {children: ReactNode}){
       const res = await axios.patch(`${import.meta.env.VITE_API_URL}/auth/change-data`, {email, username, phone, idNumber}, {withCredentials: true})
       dispatch({type: ACTIONS.CHANGE_DATA, payload: res.data})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken();
+        try{
+          const res = await axios.patch(`${import.meta.env.VITE_API_URL}/auth/change-data`, {email, username, phone, idNumber}, {withCredentials: true})
+          dispatch({type: ACTIONS.CHANGE_DATA, payload: res.data})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong"})
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{
@@ -194,6 +245,20 @@ function AuthProvider({children} : {children: ReactNode}){
       await axios.delete(`${import.meta.env.VITE_API_URL}/auth/logout`, {withCredentials: true})
       dispatch({type: ACTIONS.LOG_OUT})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          await axios.delete(`${import.meta.env.VITE_API_URL}/auth/logout`, {withCredentials: true})
+          dispatch({type: ACTIONS.LOG_OUT})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong" })
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{
@@ -208,6 +273,20 @@ function AuthProvider({children} : {children: ReactNode}){
       await axios.delete(`${import.meta.env.VITE_API_URL}/auth/logout-all`, {withCredentials: true})
       dispatch({type: ACTIONS.LOG_OUT_ALL})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          await axios.delete(`${import.meta.env.VITE_API_URL}/auth/logout-all`, {withCredentials: true})
+          dispatch({type: ACTIONS.LOG_OUT_ALL})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong" })
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{
@@ -222,6 +301,20 @@ function AuthProvider({children} : {children: ReactNode}){
       await axios.delete(`${import.meta.env.VITE_API_URL}/auth/delete-account`, {withCredentials: true})
       dispatch({type: ACTIONS.DELETE_ACCOUNT})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          await axios.delete(`${import.meta.env.VITE_API_URL}/auth/delete-account`, {withCredentials: true})
+          dispatch({type: ACTIONS.DELETE_ACCOUNT})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong" })
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{

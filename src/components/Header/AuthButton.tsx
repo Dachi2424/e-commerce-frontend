@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { LogIn, User, ChevronRight } from "lucide-react"
 
 type Props = {
@@ -8,10 +8,15 @@ type Props = {
 }
 
 function AuthButton({ isAuthenticated, mobile = false, onNavigate }: Props) {
+  const location = useLocation()
+  // Remember where the user was, so Login can send them back after success.
+  const loginState = { from: location.pathname + location.search }
+
   if (mobile) {
     return (
       <Link
-        to={isAuthenticated ? "/profile" : "/login"}
+        to={isAuthenticated ? "/profile" : "/auth"}
+        state={isAuthenticated ? undefined : loginState}
         className="mobile-drawer__row"
         onClick={onNavigate}
       >
@@ -31,7 +36,7 @@ function AuthButton({ isAuthenticated, mobile = false, onNavigate }: Props) {
   }
 
   return (
-    <Link to="/login" className="auth-button" onClick={onNavigate} aria-label="Log in">
+    <Link to="/auth" state={loginState} className="auth-button" onClick={onNavigate} aria-label="Log in">
       <LogIn size={22} />
     </Link>
   )

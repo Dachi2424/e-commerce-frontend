@@ -1,5 +1,6 @@
 import { createContext, useReducer, useEffect, type ReactNode, useContext } from "react";
 import axios, {isAxiosError} from "axios";
+import { useAuth } from "./AuthContext";
 
 
 type Product = {
@@ -111,13 +112,29 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 
 function CartProvider({children} : {children: ReactNode}){
   const [state, dispatch] = useReducer(reducer, initialState)
+  const {state: authState, refreshToken} = useAuth()
 
   async function getCart(){
+    if(!authState.user) return;
     dispatch({type: ACTIONS.SET_LOADING})
     try{
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/cart`, {withCredentials: true})
       dispatch({type: ACTIONS.GET_CART, payload: res.data})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          const res = await axios.get(`${import.meta.env.VITE_API_URL}/cart`, {withCredentials: true})
+          dispatch({type: ACTIONS.GET_CART, payload: res.data})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong"})
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{
@@ -126,9 +143,10 @@ function CartProvider({children} : {children: ReactNode}){
     }
   }
 
+
   useEffect(() => {
     getCart()
-  }, [])
+  }, [authState.user])
 
 
   async function addToCart({productId, quantity}: {productId: number, quantity: number}){
@@ -137,6 +155,20 @@ function CartProvider({children} : {children: ReactNode}){
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/cart/${productId}`, {quantity}, {withCredentials: true})
       dispatch({type: ACTIONS.ADD_TO_CART, payload: res.data.cartItem})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          const res = await axios.post(`${import.meta.env.VITE_API_URL}/cart/${productId}`, {quantity}, {withCredentials: true})
+          dispatch({type: ACTIONS.ADD_TO_CART, payload: res.data.cartItem})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong"})
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{
@@ -152,11 +184,25 @@ function CartProvider({children} : {children: ReactNode}){
         await axios.patch(`${import.meta.env.VITE_API_URL}/cart/${productId}`, {quantity}, {withCredentials: true})
         dispatch({type: ACTIONS.UPDATE_QUANTITY, payload: {productId, quantity}})
       } catch(err){
-      if(isAxiosError(err)){
-        dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
-      } else{
-        dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
-      }
+        if(isAxiosError(err) && err.response?.status === 401){
+          await refreshToken()
+          try{
+            await axios.patch(`${import.meta.env.VITE_API_URL}/cart/${productId}`, {quantity}, {withCredentials: true})
+            dispatch({type: ACTIONS.UPDATE_QUANTITY, payload: {productId, quantity}})
+          } catch(retryErr){
+            if(isAxiosError(retryErr)){
+              dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong"})
+            } else{
+              dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+            }
+          }
+          return;
+        }
+        if(isAxiosError(err)){
+          dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
+        } else{
+          dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+        }
     }
   }
 
@@ -167,6 +213,20 @@ function CartProvider({children} : {children: ReactNode}){
       await axios.delete(`${import.meta.env.VITE_API_URL}/cart/${productId}`, {withCredentials: true})
       dispatch({type: ACTIONS.DELETE_ITEM, payload: productId})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          await axios.delete(`${import.meta.env.VITE_API_URL}/cart/${productId}`, {withCredentials: true})
+          dispatch({type: ACTIONS.DELETE_ITEM, payload: productId})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong"})
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else{
@@ -182,6 +242,20 @@ function CartProvider({children} : {children: ReactNode}){
       await axios.delete(`${import.meta.env.VITE_API_URL}/cart`, {withCredentials: true})
       dispatch({type: ACTIONS.CLEAR_CART})
     } catch(err){
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          await axios.delete(`${import.meta.env.VITE_API_URL}/cart`, {withCredentials: true})
+          dispatch({type: ACTIONS.CLEAR_CART})
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            dispatch({type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong"})
+          } else{
+            dispatch({type: ACTIONS.SET_ERROR, payload: "Something went wrong"})
+          }
+        }
+        return;
+      }
       if(isAxiosError(err)){
         dispatch({type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong"})
       } else {

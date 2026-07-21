@@ -395,6 +395,7 @@
 // ---- Cart preview ----
 .cart-preview {
   position: relative;
+  z-index: 2;
 
   &__trigger {
     position: relative;

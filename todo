@@ -1,1 +1,115 @@
+STEPS:
+1) when clicking edit it doesnt really show products specs
+
+
+
+
+
 add animations on fade-in and fade-out in header components
+
+
+
+
+
+
+
+
+
+
+
+{
+  "name": "iPhone 16 Pro Max",
+  "description": "One of the best phones nowadays",
+  "price": 2500,
+  "stock": 24,
+  "category": "phone",
+  "imageUrl": [
+    "https://www.machines.com.my/cdn/shop/files/iPhone_16_Pink_PDP_Image_Position_1a_Pink_Colour__MY-EN.jpg?v=1725954714",
+    "https://istorm.com.cy/cdn/shop/files/IMG-14772677_119b3cff-8380-489b-8284-311593f3946a.jpg?v=1741946319&width=1445",
+    "https://prod-cdn.prod.asbis.io/s3size/el:t/f:webp/rt:fill/plain/s3://cms/product/74/89/748944df423fdfc4f6ee9add49075231/250331120250237666.webp"
+  ],
+  "specifications": {
+    "general": {
+      "brand": "Apple",
+      "serie": "IPhone 16",
+      "weight": 170,
+      "color": "Black",
+      "warrantyForPhysicalPerson": 24
+    },
+    "connectivity": {
+      "2G": true,
+      "3G": true,
+      "4G(LTE)": true,
+      "4.5G(LTE-A)": true,
+      "5G": true,
+      "bluetooth": "5.3, A2DP, LE",
+      "NFC": true,
+      "Wi-Fi": "Wi-Fi 802.11 a/b/g/n/ac/6/7, dual-band, hotspot",
+      "fmRadioSupport": false
+    },
+    "display": {
+      "diagonal": 6.1,
+      "resolution": "1179 x 2556",
+      "screenType": "Super Retina XDR OLED",
+      "screenFormat": "19.5:9",
+      "refreshRate": 60,
+      "HDRSupport": "HDR10",
+      "screenProtection": "Ceramic Shield glass",
+      "brightness": 2000,
+      "doblyVision": true
+    },
+    "processor": {
+      "processorManufacturer": "Apple",
+      "processorType": "Apple A18 (3 nm)",
+      "processor": "Hexa-core (2x4.04 GHz + 4x2.X GHz)",
+      "numberOfCores": 6,
+      "lithography": 3,
+      "graphicProcessor": "Apple GPU (5-core graphics)"
+    },
+    "memory": {
+      "RAM": 8,
+      "internalMemory": 128,
+      "memoryCardSupport": false
+    },
+    "camera": {
+      "numberOfCamera": 2,
+      "mianCameraMp": "48 MP, f/1.6, 26mm (wide), 1/1.56\", 1.0µm, dual pixel PDAF, sensor-shift OIS",
+      "secondCameraMp": "12 MP, f/2.2, 13mm, 120˚ (ultrawide), 0.7µm, dual pixel PDAF",
+      "videoResolution": "4K@24/25/30/60fps, 1080p@25/30/60/120/240fps, HDR, Dolby Vision HDR (up to 60fps), stereo sound rec.",
+      "autoFocus": true,
+      "panorama": true,
+      "mainCelfieCameraMp": 12,
+      "secondCelfieCameraMp": "SL 3D",
+      "celfieVideoResolution": "4K@24/25/30/60fps, 1080p@25/30/60/120fps, gyro-EIS",
+      "celfieAutoFocus": true
+    },
+    "sensors": {
+      "faceId": true,
+      "accelometer": true,
+      "compass": true,
+      "barometer": true,
+      "proximity": true,
+      "siri": true
+    },
+    "battery": {
+      "wirelessCharging": [true, "15W"],
+      "batteryType": "Li-ion",
+      "fastCharging": [true, "20W, 50% in 30 min"]
+    },
+    "os": {
+      "OSVersion": 18,
+      "OSUpgradable": true,
+      "OS": "iOS"
+    },
+    "audio": {
+      "stereoSound": true,
+      "loudSpeaker": true,
+      "numberOfSpeakers": 2,
+      "microphone": true
+    },
+    "accessories": {
+      "adapter": false,
+      "cableIncluded": true
+    }
+  }
+}
