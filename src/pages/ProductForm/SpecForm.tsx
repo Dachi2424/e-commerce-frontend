@@ -1,5 +1,8 @@
-import type { SpecField } from "./specSchemas/phone"
-import type { SpecValues, SpecValue } from "./ProductForm"
+import type { SpecField } from "./specSchemas/types"
+
+export type SpecValue = string | number | boolean | null | undefined | [boolean, string]
+
+export type SpecValues = Record<string, Record<string, SpecValue>>
 
 type Props = {
   schema: SpecField[]
@@ -22,14 +25,16 @@ function SpecForm({ schema, values, onChange }: Props) {
 
           <div className="spec-form__grid">
             {schema
-              .filter((f) => f.group === group)
+              .filter((field) => field.group === group)
               .map((field) => (
                 <SpecFieldInput
                   key={field.key}
                   field={field}
                   value={values[field.group]?.[field.key]}
                   values={values}
-                  onChange={(v) => onChange(field.group, field.key, v)}
+                  onChange={(value) =>
+                    onChange(field.group, field.key, value)
+                  }
                 />
               ))}
           </div>
@@ -48,7 +53,7 @@ function SpecFieldInput({
   field: SpecField
   value: SpecValue
   values: SpecValues
-  onChange: (v: SpecValue) => void
+  onChange: (value: SpecValue) => void
 }) {
   switch (field.type) {
     case "text":
@@ -64,18 +69,22 @@ function SpecFieldInput({
       )
 
     case "number":
-      return (
-        <label className="spec-form__field">
-          <span>{field.label}</span>
-          <input
-            type="number"
-            value={value === undefined || value === null ? "" : (value as number)}
-            onChange={(e) =>
-              onChange(e.target.value === "" ? undefined : Number(e.target.value))
-            }
-          />
-        </label>
-      )
+    return (
+      <label className="spec-form__field">
+        <span>{field.label}</span>
+        <input
+          type="number"
+          value={typeof value === "number" ? value : ""}
+          onChange={(e) =>
+            onChange(
+              e.target.value === ""
+                ? undefined
+                : Number(e.target.value)
+            )
+          }
+        />
+      </label>
+    )
 
     case "boolean":
       return (
@@ -90,8 +99,9 @@ function SpecFieldInput({
       )
 
     case "boolean-with-text": {
-      const tuple = Array.isArray(value) ? value : [false, ""]
-      const [checked, text] = tuple as [boolean, string]
+      const [checked, text] = Array.isArray(value)
+        ? value
+        : [false, ""]
 
       return (
         <div className="spec-form__field spec-form__field--boolean-with-text">
@@ -99,18 +109,24 @@ function SpecFieldInput({
             <input
               type="checkbox"
               checked={checked}
-              onChange={(e) => onChange([e.target.checked, text])}
+              onChange={(e) =>
+                onChange([e.target.checked, text])
+              }
             />
+
             <span>{field.label}</span>
           </label>
 
           {checked && (
             <label className="spec-form__nested-input">
               <span>{field.textLabel || "Details"}</span>
+
               <input
                 type="text"
                 value={text}
-                onChange={(e) => onChange([checked, e.target.value])}
+                onChange={(e) =>
+                  onChange([checked, e.target.value])
+                }
               />
             </label>
           )}
@@ -135,9 +151,9 @@ function SpecFieldInput({
               Select…
             </option>
 
-            {options.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
               </option>
             ))}
           </select>
@@ -150,4 +166,4 @@ function SpecFieldInput({
   }
 }
 
-export default SpecForm;
+export default SpecForm

@@ -1,14 +1,4 @@
-// A schema is just data describing what fields exist for this category and
-// how to render them. SpecForm reads this and doesn't need to know anything
-// about phones specifically — copy this file for laptop/tablet/etc and swap
-// the fields.
-//
-// `group` doubles as the actual storage key inside specifications (e.g.
-// specifications.display.diagonal), so it must be lowercase and match
-// exactly what the backend stores/expects.
 import type { SpecField } from "./types"
-
-
 
 
 const phoneSeries: Record<string, string[]> = {
