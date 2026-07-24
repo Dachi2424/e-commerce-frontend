@@ -44,7 +44,7 @@ const graphicsMemory: Record<string, string[]> = {
 export const laptopSpecSchema: SpecField[] = [
   // general
   { key: "brand", label: "Brand", type: "select", options: Object.keys(laptopSeries), group: "general" },
-  { key: "series", label: "Series", type: "select", group: "general", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return laptopSeries[brand] || []}},
+  { key: "series", label: "Series", type: "select", group: "general", dependsOn: "brand", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return laptopSeries[brand] || []}},
   { key: "weight", label: "Weight (g)", type: "number", group: "general" },
   { key: "color", label: "Color", type: "select", options: ["Black", "White", "Silver", "Gray", "Blue", "Green"], group: "general" },
   { key: "warrantyForPhysicalPerson", label: "Warranty (months)", type: "number", group: "general" },
@@ -59,14 +59,14 @@ export const laptopSpecSchema: SpecField[] = [
 
   // processor
   { key: "processorManufacturer", label: "Processor manufacturer", type: "select", options: Object.keys(processorTypes), group: "processor" },
-  { key: "processorType", label: "Processor type", type: "select", group: "processor", getOptions: (specifications) => { const manufacturer = specifications.processor?.processorManufacturer as string; return processorTypes[manufacturer] || []}},
+  { key: "processorType", label: "Processor type", type: "select", group: "processor", dependsOn: "processorManufacturer", getOptions: (specifications) => { const manufacturer = specifications.processor?.processorManufacturer as string; return processorTypes[manufacturer] || []}},
   { key: "numberOfCores", label: "Number of cores", type: "number", group: "processor" },
   { key: "processorSpeed", label: "Processor speed (GHz)", type: "number", group: "processor" },
 
   // graphics
   { key: "graphicsManufacturer", label: "Graphics manufacturer", type: "select", options: Object.keys(graphicsModels), group: "graphics" },
-  { key: "graphicsModel", label: "Graphics model", type: "select", group: "graphics", getOptions: (specifications) => {const manufacturer = specifications.graphics?.graphicsManufacturer as string; return graphicsModels[manufacturer] || []} },
-  { key: "graphicsMemory", label: "Graphics memory", type: "select", group: "graphics", getOptions: (specifications) => {const manufacturer = specifications.graphics?.graphicsManufacturer as string; return graphicsMemory[manufacturer] || []} },
+  { key: "graphicsModel", label: "Graphics model", type: "select", group: "graphics", dependsOn: "graphicsManufacturer", getOptions: (specifications) => {const manufacturer = specifications.graphics?.graphicsManufacturer as string; return graphicsModels[manufacturer] || []} },
+  { key: "graphicsMemory", label: "Graphics memory", type: "select", group: "graphics", dependsOn: "graphicsManufacturer", getOptions: (specifications) => {const manufacturer = specifications.graphics?.graphicsManufacturer as string; return graphicsMemory[manufacturer] || []} },
 
   // memory
   { key: "RAM", label: "RAM", type: "select", options: ["4GB", "8GB", "16GB", "24GB", "32GB", "64GB", "128GB"], group: "memory" },

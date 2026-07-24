@@ -1,0 +1,83 @@
+.price-range-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.price-range-slider__values {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-primary);
+}
+
+.price-range-slider__track-wrap {
+  position: relative;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.price-range-slider__track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-border);
+}
+
+.price-range-slider__track-fill {
+  position: absolute;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
+// The two-overlapping-range-inputs trick: both inputs sit on top of each
+// other, invisible track, only the thumb is interactive. Whichever thumb
+// is physically closer to the pointer receives the click natively.
+.price-range-slider__input {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: 0;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  &::-webkit-slider-runnable-track {
+    background: transparent;
+  }
+
+  &::-moz-range-track {
+    background: transparent;
+  }
+
+  &::-webkit-slider-thumb {
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 2px solid var(--color-surface);
+    box-shadow: 0 1px 4px rgba(21, 76, 121, 0.3);
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 2px solid var(--color-surface);
+    box-shadow: 0 1px 4px rgba(21, 76, 121, 0.3);
+    cursor: pointer;
+  }
+}

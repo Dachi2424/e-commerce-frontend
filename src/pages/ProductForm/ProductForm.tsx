@@ -5,11 +5,13 @@ import SpecForm, { type SpecValue, type SpecValues } from "./SpecForm"
 import { CATEGORY_SPEC_SCHEMAS } from "./specSchemas"
 import { CATEGORIES } from "../../components/Header/categories"
 import "./ProductForm.scss"
+import { useAuth } from "../../context/AuthContext"
 
 function ProductForm() {
   const { id } = useParams()
   const isEditMode = Boolean(id)
   const navigate = useNavigate()
+  const {refreshToken} = useAuth()
 
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
@@ -22,6 +24,10 @@ function ProductForm() {
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(isEditMode)
   const [error, setError] = useState<string | null>(null)
+
+  // Defined here (before the handlers that use it) so it's easy to see
+  // that handleSpecChange always has the current category's schema available.
+  const schema = CATEGORY_SPEC_SCHEMAS[category] || []
 
   useEffect(() => {
     if (!isEditMode) return
@@ -67,10 +73,23 @@ function ProductForm() {
   }
 
   function handleSpecChange(group: string, key: string, value: SpecValue) {
-    setSpecifications((prev) => ({
-      ...prev,
-      [group]: { ...prev[group], [key]: value },
-    }))
+    setSpecifications((prev) => {
+      const next = {
+        ...prev,
+        [group]: { ...prev[group], [key]: value },
+      }
+
+      // If any field depends on the one that just changed (e.g. Series
+      // depends on Brand), its previously saved value may no longer be a
+      // valid option — clear it out instead of silently keeping stale data.
+      for (const field of schema) {
+        if (field.dependsOn === key) {
+          next[field.group] = { ...next[field.group], [field.key]: undefined }
+        }
+      }
+
+      return next
+    })
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -101,13 +120,27 @@ function ProductForm() {
       }
       navigate("/admin/products")
     } catch (err) {
+      if(isAxiosError(err) && err.response?.status === 401){
+        await refreshToken()
+        try{
+          if (isEditMode) {
+            await axios.patch(`${import.meta.env.VITE_API_URL}/admin/products/${id}`, payload, { withCredentials: true })
+          } else {
+            await axios.post(`${import.meta.env.VITE_API_URL}/admin/products`, payload, { withCredentials: true })
+          }
+          navigate("/admin/products")
+        } catch(retryErr){
+          if(isAxiosError(retryErr)){
+            setError(err.response?.data?.error || "Something went wrong")
+          }
+        }
+        return;
+      } 
       setError(isAxiosError(err) ? err.response?.data?.error || "Something went wrong" : "Something went wrong")
     } finally {
       setLoading(false)
     }
   }
-
-  const schema = CATEGORY_SPEC_SCHEMAS[category] || []
 
   if (fetching) {
     return (
@@ -204,4 +237,4 @@ function ProductForm() {
   )
 }
 
-export default ProductForm;
+export default ProductForm

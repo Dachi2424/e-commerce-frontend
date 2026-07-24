@@ -38,7 +38,7 @@ const processorTypes: Record<string, string[]> = {
 export const phoneSpecSchema: SpecField[] = [
   // general
   { key: "brand", label: "Brand", type: "select", options: Object.keys(phoneSeries), group: "general" },
-  { key: "series", label: "Series", type: "select", group: "general", getOptions: (specifications) => {const brand = specifications.general?.brand as string; return phoneSeries[brand] || []}},
+  { key: "series", label: "Series", type: "select", group: "general", dependsOn: "brand", getOptions: (specifications) => {const brand = specifications.general?.brand as string; return phoneSeries[brand] || []}},
   { key: "weight", label: "Weight (g)", type: "number", group: "general" },
   { key: "color", label: "Color", type: "select", options: ["Black", "White", "Gray", "Silver", "Blue", "Green", "Purple", "Pink", "Red", "Gold", "Titanium", "Natural Titanium"], group: "general" },
   { key: "warrantyForPhysicalPerson", label: "Warranty (months)", type: "number", group: "general" },
@@ -66,7 +66,7 @@ export const phoneSpecSchema: SpecField[] = [
 
   // processor
   { key: "processorManufacturer", label: "Processor manufacturer", type: "select", options: Object.keys(processorTypes), group: "processor" },
-  { key: "processorType", label: "Processor type", type: "select", getOptions: (specifications) => {const manufacturer = specifications.processor?.processorManufacturer as string; return processorTypes[manufacturer] || []}, group: "processor" },
+  { key: "processorType", label: "Processor type", type: "select", dependsOn: "processorManufacturer", getOptions: (specifications) => {const manufacturer = specifications.processor?.processorManufacturer as string; return processorTypes[manufacturer] || []}, group: "processor" },
   { key: "numberOfCores", label: "Number of cores", type: "number", group: "processor" },
   { key: "lithography", label: "Lithography (nm)", type: "number", group: "processor" },
   { key: "graphicProcessor", label: "Graphics processor", type: "select", options: ["Apple GPU", "Adreno", "Mali", "Immortalis-G720", "Immortalis-G925", "Xclipse", "PowerVR", "IMG B-Series", "IMG C-Series"], group: "processor" },

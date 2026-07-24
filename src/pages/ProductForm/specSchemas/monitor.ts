@@ -22,7 +22,7 @@ export const monitorSpecSchema: SpecField[] = [
   { key: "resolution", label: "Resolution", type: "select", options: ["1280×720", "1366×768", "1600×900", "1920×1080", "1920×1200", "2560×1080", "2560×1440", "3440×1440", "3840×2160", "5120×1440", "5120×2160", "7680×4320"], group: "display" },
   { key: "aspectRatio", label: "Aspect ratio", type: "select", options: ["4:3", "5:4", "16:9", "16:10", "17:9", "21:9", "24:10", "32:9", "32:10"], group: "display" },
   { key: "panelManufacturer", label: "Panel manufacturer", type: "select", options: Object.keys(panelManufacturers), group: "display" },
-  { key: "panelType", label: "Panel type", type: "select", group: "display", getOptions: (specifications) => { const manufacturer = specifications.display?.panelManufacturer as string; return panelManufacturers[manufacturer] || [] } },
+  { key: "panelType", label: "Panel type", type: "select", group: "display", dependsOn: "panelManufacturer", getOptions: (specifications) => { const manufacturer = specifications.display?.panelManufacturer as string; return panelManufacturers[manufacturer] || [] } },
   { key: "refreshRate", label: "Refresh rate (Hz)", type: "select", options: ["60", "75", "100", "120", "144", "160", "165", "170", "180", "200", "240", "280", "300", "360", "480", "540"], group: "display" },
   { key: "responseTime", label: "Response time (ms)", type: "select", options: ["0.03", "0.1", "0.5", "1", "2", "4", "5", "8"], group: "display" },
   { key: "brightness", label: "Brightness (nits)", type: "number", group: "display" },

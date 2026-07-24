@@ -18,13 +18,13 @@ export const pcSpecSchema: SpecField[] = [
 
   // processor
   { key: "processorManufacturer", label: "Processor manufacturer", type: "select", options: Object.keys(cpuTypes), group: "processor" },
-  { key: "processorType", label: "Processor type", type: "select", group: "processor", getOptions: (specifications) => { const manufacturer = specifications.processor?.processorManufacturer as string; return cpuTypes[manufacturer] || [] }},
+  { key: "processorType", label: "Processor type", type: "select", group: "processor", dependsOn: "processorManufacturer", getOptions: (specifications) => { const manufacturer = specifications.processor?.processorManufacturer as string; return cpuTypes[manufacturer] || [] }},
   { key: "numberOfCores", label: "Number of cores", type: "number", group: "processor" },
   { key: "processorSpeed", label: "Processor speed (GHz)", type: "number", group: "processor" },
 
   // graphics
   { key: "graphicsManufacturer", label: "Graphics manufacturer", type: "select", options: Object.keys(gpuModels), group: "graphics" },
-  { key: "graphicsModel", label: "Graphics model", type: "select", group: "graphics", getOptions: (specifications) => { const manufacturer = specifications.graphics?.graphicsManufacturer as string; return gpuModels[manufacturer] || [] }},
+  { key: "graphicsModel", label: "Graphics model", type: "select", group: "graphics", dependsOn: "graphicsManufacturer", getOptions: (specifications) => { const manufacturer = specifications.graphics?.graphicsManufacturer as string; return gpuModels[manufacturer] || [] }},
   { key: "graphicsMemory", label: "Graphics memory", type: "select", options: ["4GB", "6GB", "8GB", "12GB", "16GB", "24GB"], group: "graphics" },
 
   // memory

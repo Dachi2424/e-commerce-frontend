@@ -21,16 +21,16 @@ const consoleGPU: Record<string, string[]> = {
 export const consoleSpecSchema: SpecField[] = [
   // general
   { key: "brand", label: "Brand", type: "select", options: Object.keys(consoleSeries), group: "general" },
-  { key: "series", label: "Series", type: "select", group: "general",getOptions: (specifications) => { const brand = specifications.general?.brand as string; return consoleSeries[brand] || []}},
+  { key: "series", label: "Series", type: "select", group: "general", dependsOn: "brand", getOptions: (specifications) => {const brand = specifications.general?.brand as string; return consoleSeries[brand] || [] }},
 
   { key: "color", label: "Color", type: "select", options: ["Black", "White", "Gray", "Blue", "Red"], group: "general" },
   { key: "releaseYear", label: "Release year", type: "number", group: "general" },
 
   // processor
-  { key: "CPU", label: "CPU", type: "select",group: "processor",getOptions: (specifications) => { const brand = specifications.general?.brand as string; return consoleCPU[brand] || []}},
+  { key: "CPU", label: "CPU", type: "select", group: "processor", dependsOn: "brand", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return consoleCPU[brand] || [] }},
 
   // graphics
-  {key: "GPU", label: "GPU", type: "select",group: "graphics", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return consoleGPU[brand] || [] }},
+  { key: "GPU", label: "GPU", type: "select", group: "graphics", dependsOn: "brand", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return consoleGPU[brand] || [] }},
   { key: "rayTracing", label: "Ray tracing support", type: "boolean", group: "graphics" },
 
   // memory

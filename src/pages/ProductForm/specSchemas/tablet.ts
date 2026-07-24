@@ -27,7 +27,7 @@ const processorTypes: Record<string, string[]> = {
 
 export const tabletSpecSchema: SpecField[] = [
   { key: "brand", label: "Brand", type: "select", options: Object.keys(tabletSeries), group: "general" },
-  { key: "series", label: "Series", type: "select", group: "general", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return tabletSeries[brand] || [] }},
+  { key: "series", label: "Series", type: "select", group: "general", dependsOn: "brand", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return tabletSeries[brand] || [] }},
   { key: "weight", label: "Weight (g)", type: "number", group: "general" },
   { key: "color", label: "Color", type: "select", options: ["Black", "White", "Silver", "Gray", "Blue", "Green", "Gold"], group: "general" },
 
@@ -37,7 +37,7 @@ export const tabletSpecSchema: SpecField[] = [
   { key: "refreshRate", label: "Refresh rate (Hz)", type: "select", options: ["60", "90", "120", "144", "165"], group: "display" },
 
   { key: "processorManufacturer", label: "Processor manufacturer", type: "select", options: Object.keys(processorTypes), group: "processor" },
-  { key: "processorType", label: "Processor type", type: "select", group: "processor", getOptions: (specifications) => { const manufacturer = specifications.processor?.processorManufacturer as string; return processorTypes[manufacturer] || [] }},
+  { key: "processorType", label: "Processor type", type: "select", group: "processor", dependsOn: "processorManufacturer", getOptions: (specifications) => { const manufacturer = specifications.processor?.processorManufacturer as string; return processorTypes[manufacturer] || [] }},
   { key: "numberOfCores", label: "Number of cores", type: "number", group: "processor" },
 
   { key: "RAM", label: "RAM", type: "select", options: ["2GB", "3GB", "4GB", "6GB", "8GB", "12GB", "16GB"], group: "memory" },

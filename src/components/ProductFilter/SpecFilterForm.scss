@@ -1,0 +1,133 @@
+.spec-filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.spec-filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spec-filter-form__group {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+.spec-filter-form__group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--color-surface);
+  }
+}
+
+.spec-filter-form__group-chevron {
+  color: var(--color-muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+
+  &--open {
+    transform: rotate(180deg);
+  }
+}
+
+// CSS-only expand/collapse animation: animating `grid-template-rows`
+// between 0fr and 1fr gives a real height transition without needing to
+// measure content height in JS. The inner wrapper needs overflow:hidden
+// and min-height:0 for the grid trick to actually clip during the animation.
+.spec-filter-form__group-body-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.22s ease;
+
+  &--open {
+    grid-template-rows: 1fr;
+  }
+}
+
+.spec-filter-form__group-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.spec-filter-form__group-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 14px 14px;
+}
+
+.spec-filter-form__group-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--color-primary);
+  text-transform: capitalize;
+  letter-spacing: 0.01em;
+}
+
+.spec-filter-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spec-filter-form__field-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.spec-filter-form__hint {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+.spec-filter-form__options {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spec-filter-form__option,
+.spec-filter-form__checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 5px 6px;
+  margin: 0 -6px;
+  border-radius: 6px;
+  transition: background 0.12s ease;
+
+  &:hover {
+    background: var(--color-surface);
+  }
+
+  input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+  }
+}

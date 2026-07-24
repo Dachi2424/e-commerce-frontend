@@ -23,7 +23,7 @@ const keyboardSeries: Record<string, string[]> = {
 export const keyboardSpecSchema: SpecField[] = [
   // general
   { key: "brand", label: "Brand", type: "select", options: Object.keys(keyboardSeries), group: "general" },
-  { key: "series", label: "Series", type: "select", group: "general", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return keyboardSeries[brand] || [] } },
+  { key: "series", label: "Series", type: "select", group: "general", dependsOn: "brand", getOptions: (specifications) => { const brand = specifications.general?.brand as string; return keyboardSeries[brand] || [] } },
   { key: "color", label: "Color", type: "select", options: ["Black", "White", "Gray", "Silver", "Blue", "Red", "Green", "Pink", "Purple", "Yellow"], group: "general" },
   { key: "layout", label: "Layout", type: "select", options: ["ANSI", "ISO", "JIS"] , group: "general" },
   { key: "formFactor", label: "Form factor", type: "select", options: ["100%", "96%", "95%", "90%", "87% (TKL)", "80% (TKL)", "75%", "70%", "68%", "65%", "60%", "40%", "Numpad"] , group: "general" },
