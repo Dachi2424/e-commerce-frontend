@@ -19,7 +19,7 @@ type CartItem = {
   userId: number,
   productId: number,
   quantity: number,
-  Products: Product
+  Product: Product
 }
 
 type CartState = {
@@ -80,8 +80,17 @@ function reducer(state: CartState, action: Action): CartState{
       return {...state, error: action.payload, loading: false}
     case ACTIONS.GET_CART:
       return {...state, error: null, loading: false, cart: action.payload}
-    case ACTIONS.ADD_TO_CART:
-      return {...state, error: null, loading: false, cart: [...state.cart, action.payload]}
+    case ACTIONS.ADD_TO_CART: {
+      const alreadyInCart = state.cart.some((item) => item.productId === action.payload.productId)
+      return {
+        ...state,
+        error: null,
+        loading: false,
+        cart: alreadyInCart
+          ? state.cart.map((item) => (item.productId === action.payload.productId ? action.payload : item))
+          : [...state.cart, action.payload],
+      }
+    }
     case ACTIONS.UPDATE_QUANTITY:
       return {
         ...state, 

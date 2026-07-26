@@ -7,6 +7,21 @@
 // media query) to your page wrapper / <main> — the header floats above
 // everything otherwise.
 
+@keyframes cart-badge-bump {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.45);
+  }
+  60% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -101,7 +116,7 @@
   position: relative;
   flex-shrink: 0;
   z-index: 2;
-  animation: category-fade-in .4s forwards; 
+
   &__trigger {
     display: flex;
     align-items: center;
@@ -139,7 +154,7 @@
     border: 1px solid var(--color-border);
     border-radius: 14px;
     box-shadow: 0 16px 40px rgba(21, 76, 121, 0.14);
-    width: 250px;
+    width: 300px;
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -165,7 +180,7 @@
   &__card {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     background: none;
     border: 1px solid transparent;
@@ -228,6 +243,8 @@
   position: relative;
   flex: 1;
   max-width: 420px;
+  z-index: 2;
+
 
   &__input-wrap {
     display: flex;
@@ -434,13 +451,17 @@
       position: static;
       margin-left: auto;
     }
+
+    &--bump {
+      animation: cart-badge-bump 0.4s ease;
+    }
   }
 
   &__panel {
     position: absolute;
     top: calc(100% + 14px);
     right: 0;
-    width: 300px;
+    width: 340px;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 12px;
@@ -507,14 +528,9 @@
 
   &__item {
     display: flex;
-    align-items: center;
     gap: 10px;
-    background: none;
-    border: none;
-    padding: 8px;
+    padding: 10px 8px;
     border-radius: 8px;
-    cursor: pointer;
-    text-align: left;
 
     &:hover {
       background: var(--color-bg);
@@ -522,19 +538,21 @@
   }
 
   &__item-image {
-    width: 42px;
-    height: 42px;
+    width: 64px;
+    height: 64px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--color-bg);
     flex-shrink: 0;
+    cursor: pointer;
   }
 
   &__item-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     min-width: 0;
+    flex: 1;
   }
 
   &__item-name {
@@ -544,14 +562,84 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-primary);
+    }
   }
 
-  &__item-meta {
+  &__item-price {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--color-primary);
+  }
+
+  &__item-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+
+}
+
+.cart-preview__qty-stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  padding: 2px;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: var(--color-bg);
+    border-radius: 5px;
+    color: var(--color-text);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: var(--color-primary);
+      color: var(--color-surface);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+
+  span {
+    min-width: 16px;
+    text-align: center;
     font-family: var(--font-mono);
     font-size: 12px;
-    color: var(--color-muted);
+    color: var(--color-text);
   }
+}
 
+.cart-preview__delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  color: var(--color-muted);
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(224, 82, 47, 0.1);
+    color: var(--color-danger);
+  }
 }
 
 // ---- Auth button ----
@@ -971,5 +1059,3 @@
   color: var(--color-primary);
   cursor: pointer;
 }
-
-

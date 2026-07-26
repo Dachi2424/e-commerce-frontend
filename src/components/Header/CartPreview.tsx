@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { ShoppingCart } from "lucide-react"
+import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react"
 import { useCart } from "../../context/CartContext"
 
 type Props = {
@@ -11,8 +11,29 @@ type Props = {
 
 function CartPreview({ count, mobile = false, onNavigate }: Props) {
   const [hovering, setHovering] = useState(false)
-  const { state } = useCart()
+  const [bump, setBump] = useState(false)
+  const prevCountRef = useRef(count)
+  const { state, changeQuantity, deleteItem } = useCart()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (count > prevCountRef.current) {
+      setBump(true)
+      const timeoutId = setTimeout(() => setBump(false), 400)
+      prevCountRef.current = count
+      return () => clearTimeout(timeoutId)
+    }
+    prevCountRef.current = count
+  }, [count])
+
+  function handleQuantityChange(productId: number, quantity: number) {
+    if (quantity < 1) return
+    changeQuantity({ productId, quantity })
+  }
+
+  function handleDelete(productId: number) {
+    deleteItem({ productId })
+  }
 
   function goToCheckout() {
     navigate("/checkout")
@@ -29,17 +50,19 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
     onNavigate?.()
   }
 
-  if (mobile) {
-    const total = state.cart.reduce(
-      (sum, item) => sum + Number(item.Products.price) * item.quantity,
-      0
-    )
+  const total = state.cart.reduce(
+    (sum, item) => (item.Product ? sum + Number(item.Product.price) * item.quantity : sum),
+    0
+  )
 
+  if (mobile) {
     return (
       <button type="button" className="mobile-drawer__cart-bar" onClick={goToCheckout}>
         <span className="mobile-drawer__cart-bar-icon">
           <ShoppingCart size={20} />
-          {count > 0 && <span className="cart-preview__badge">{count}</span>}
+          {count > 0 && (
+            <span className={`cart-preview__badge ${bump ? "cart-preview__badge--bump" : ""}`}>{count}</span>
+          )}
         </span>
         <span className="mobile-drawer__cart-bar-label">
           {count === 0 ? "View cart" : `View cart · ${count} item${count > 1 ? "s" : ""}`}
@@ -57,7 +80,9 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
     >
       <button type="button" className="cart-preview__trigger" onClick={goToCheckout} aria-label="Go to checkout">
         <ShoppingCart size={22} />
-        {count > 0 && <span className="cart-preview__badge">{count}</span>}
+        {count > 0 && (
+          <span className={`cart-preview__badge ${bump ? "cart-preview__badge--bump" : ""}`}>{count}</span>
+        )}
       </button>
 
       {hovering && (
@@ -77,24 +102,53 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
             <>
               <div className="cart-preview__list">
                 {state.cart.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="cart-preview__item"
-                    onClick={() => goToProduct(item.productId)}
-                  >
+                  <div key={item.id} className="cart-preview__item">
                     <img
-                      src={item.Products.imageUrl?.[0] || "/placeholder-product.png"}
-                      alt={item.Products.name}
+                      src={item.Product?.imageUrl?.[0] || "/placeholder-product.png"}
+                      alt={item.Product?.name || "Product"}
                       className="cart-preview__item-image"
+                      onClick={() => goToProduct(item.productId)}
                     />
                     <div className="cart-preview__item-info">
-                      <span className="cart-preview__item-name">{item.Products.name}</span>
-                      <span className="cart-preview__item-meta">
-                        {item.quantity} × ${item.Products.price}
+                      <span className="cart-preview__item-name" onClick={() => goToProduct(item.productId)}>
+                        {item.Product?.name || "Unknown product"}
                       </span>
+                      <span className="cart-preview__item-price">
+                        {item.Product ? `$${item.Product.price}` : "—"}
+                      </span>
+
+                      <div className="cart-preview__item-controls">
+                        <div className="cart-preview__qty-stepper">
+                          <button
+                            type="button"
+                            onClick={() => handleQuantityChange(item.productId, item.quantity - 1)}
+                            disabled={item.quantity <= 1}
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus size={12} />
+                          </button>
+                          <span>{item.quantity}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleQuantityChange(item.productId, item.quantity + 1)}
+                            disabled={item.Product ? item.quantity >= item.Product.stock : false}
+                            aria-label="Increase quantity"
+                          >
+                            <Plus size={12} />
+                          </button>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="cart-preview__delete-btn"
+                          onClick={() => handleDelete(item.productId)}
+                          aria-label="Remove from cart"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </div>
-                  </button>
+                  </div>
                 ))}
               </div>
               <button type="button" className="cart-preview__checkout-btn" onClick={goToCheckout}>
