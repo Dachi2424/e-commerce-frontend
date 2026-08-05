@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useReducer } from "react"
 import { useNavigate } from "react-router-dom"
 import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react"
 import { useCart } from "../../context/CartContext"
@@ -12,9 +12,14 @@ type Props = {
 function CartPreview({ count, mobile = false, onNavigate }: Props) {
   const [hovering, setHovering] = useState(false)
   const [bump, setBump] = useState(false)
+  const [panelClosing, setPanelClosing] = useState(false)
   const prevCountRef = useRef(count)
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { state, changeQuantity, deleteItem } = useCart()
   const navigate = useNavigate()
+
+
+
 
   useEffect(() => {
     if (count > prevCountRef.current) {
@@ -25,6 +30,13 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
     }
     prevCountRef.current = count
   }, [count])
+
+  // Cancel any pending close timeout if the component unmounts mid-close.
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current)
+    }
+  }, [])
 
   function handleQuantityChange(productId: number, quantity: number) {
     if (quantity < 1) return
@@ -50,6 +62,25 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
     onNavigate?.()
   }
 
+  function openPanel(){
+    // Cancel any pending close from a moment ago — otherwise it fires
+    // later and closes a panel the user has already re-opened.
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+    setPanelClosing(false)
+    setHovering(true)
+  }
+
+  function closePanel(){
+    setPanelClosing(true)
+    closeTimeoutRef.current = setTimeout(() => {
+      setHovering(false)
+      closeTimeoutRef.current = null
+    }, 400)
+  }
+
   const total = state.cart.reduce(
     (sum, item) => (item.Product ? sum + Number(item.Product.price) * item.quantity : sum),
     0
@@ -73,20 +104,20 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
   }
 
   return (
-    <div
-      className="cart-preview"
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
-    >
+    <div className="cart-preview" onMouseEnter={() => openPanel()} onMouseLeave={() => closePanel()}>
       <button type="button" className="cart-preview__trigger" onClick={goToCheckout} aria-label="Go to checkout">
-        <ShoppingCart size={22} />
+        <ShoppingCart size={24} color="white" strokeWidth={1.8}/>
         {count > 0 && (
           <span className={`cart-preview__badge ${bump ? "cart-preview__badge--bump" : ""}`}>{count}</span>
         )}
       </button>
 
       {hovering && (
-        <div className="cart-preview__panel">
+        <div className={`cart-preview__panel ${panelClosing ? "cart-preview__panel--closing" : ""}`}>
+          <div className="cart-preview__cart-text-container">
+            <span className="cart-preview__cart-text">Cart</span>
+            <span className="cart-preview__product-count">{count} {count > 1 ? "products" : "product"}</span>
+          </div>
           {state.cart.length === 0 ? (
             <div className="cart-preview__empty">
               {/* Swap this for your own illustration once it's in /assets */}
@@ -125,7 +156,7 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
                             disabled={item.quantity <= 1}
                             aria-label="Decrease quantity"
                           >
-                            <Minus size={12} />
+                            <Minus size={11} color="white" strokeWidth={3} />
                           </button>
                           <span>{item.quantity}</span>
                           <button
@@ -134,7 +165,7 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
                             disabled={item.Product ? item.quantity >= item.Product.stock : false}
                             aria-label="Increase quantity"
                           >
-                            <Plus size={12} />
+                            <Plus size={11} color="white" strokeWidth={3} />
                           </button>
                         </div>
 
@@ -151,9 +182,11 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
                   </div>
                 ))}
               </div>
-              <button type="button" className="cart-preview__checkout-btn" onClick={goToCheckout}>
-                Go to checkout
-              </button>
+              <div className="cart-preview__total-to-pay">
+                <span className="cart-preview__total-text">Total amount to pay</span>
+                <span className="cart-preview__total-money">3000$</span>
+              </div>
+              <button type="button" className="cart-preview__checkout-btn" onClick={goToCheckout}>Go to checkout</button>
             </>
           )}
         </div>

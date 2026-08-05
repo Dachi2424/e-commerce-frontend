@@ -32,24 +32,48 @@ type Props = {
 
 function CategoryDropdown({ mobile = false, onNavigate }: Props) {
   const [open, setOpen] = useState(false)
+  const [chevronOpen, setChevronOpen] = useState(false)
+  const [fadeOutAnimation, setFadeOutAnimation] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
 
+  function closeCategory() {
+    setFadeOutAnimation(true)
+    setChevronOpen(false)
+    setTimeout(() => {
+      setOpen(false)
+      setFadeOutAnimation(false)
+    }, 300)
+  }
+
   useEffect(() => {
     if (mobile) return
+
     function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
+      if (ref.current && !ref.current.contains(e.target as Node) && open) {
+        closeCategory()
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [mobile])
+  }, [mobile, open])
 
   function handleSelect(value: string) {
     navigate(`/products?category=${value}`)
-    setOpen(false)
+    closeCategory()
     onNavigate?.()
+  }
+
+  function toggleCategory() {
+    if (open) {
+      closeCategory()
+      setChevronOpen(false)
+    } else {
+      setFadeOutAnimation(false)
+      setOpen(true)
+      setChevronOpen(true)
+    }
   }
 
   if (mobile) {
@@ -58,6 +82,7 @@ function CategoryDropdown({ mobile = false, onNavigate }: Props) {
         <span className="mobile-drawer__section-label">Categories</span>
         {CATEGORIES.map((cat) => {
           const Icon = CATEGORY_ICONS[cat.value]
+
           return (
             <button
               key={cat.value}
@@ -80,22 +105,33 @@ function CategoryDropdown({ mobile = false, onNavigate }: Props) {
       <button
         type="button"
         className="category-dropdown__trigger"
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggleCategory}
         aria-expanded={open}
       >
         <LayoutGrid size={16} />
         <span>Categories</span>
         <ChevronDown
           size={16}
-          className={`category-dropdown__chevron ${open ? "category-dropdown__chevron--open" : ""}`}
+          className={`category-dropdown__chevron ${
+            chevronOpen ? "category-dropdown__chevron--open" : ""
+          }`}
         />
       </button>
+
       {open && (
-        <div className="category-dropdown__panel">
-          <span className="category-dropdown__panel-label">Shop by category</span>
+        <div
+          className={`category-dropdown__panel ${
+            fadeOutAnimation ? "category-dropdown__panel--closing" : ""
+          }`}
+        >
+          <span className="category-dropdown__panel-label">
+            Shop by category
+          </span>
+
           <div className="category-dropdown__grid">
             {CATEGORIES.map((cat) => {
               const Icon = CATEGORY_ICONS[cat.value]
+
               return (
                 <button
                   key={cat.value}
@@ -106,17 +142,20 @@ function CategoryDropdown({ mobile = false, onNavigate }: Props) {
                   <span className="category-dropdown__card-icon">
                     <Icon size={19} />
                   </span>
-                  <span className="category-dropdown__card-label">{cat.label}</span>
+                  <span className="category-dropdown__card-label">
+                    {cat.label}
+                  </span>
                 </button>
               )
             })}
           </div>
+
           <button
             type="button"
             className="category-dropdown__view-all"
             onClick={() => {
               navigate("/products")
-              setOpen(false)
+              closeCategory()
             }}
           >
             View all products →
