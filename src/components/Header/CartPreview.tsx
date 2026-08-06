@@ -104,8 +104,8 @@ function CartPreview({ count, mobile = false, onNavigate }: Props) {
   }
 
   return (
-    <div className="cart-preview" onMouseEnter={() => openPanel()} onMouseLeave={() => closePanel()}>
-      <button type="button" className="cart-preview__trigger" onClick={goToCheckout} aria-label="Go to checkout">
+    <div className="cart-preview"  onMouseLeave={() => closePanel()}>
+      <button type="button" className="cart-preview__trigger" onClick={goToCheckout} onMouseEnter={() => openPanel()} aria-label="Go to checkout">
         <ShoppingCart size={24} color="white" strokeWidth={1.8}/>
         {count > 0 && (
           <span className={`cart-preview__badge ${bump ? "cart-preview__badge--bump" : ""}`}>{count}</span>

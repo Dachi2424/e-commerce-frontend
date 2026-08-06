@@ -30,7 +30,7 @@ function AuthButton({ isAuthenticated, mobile = false, onNavigate }: Props) {
   if (isAuthenticated) {
     return (
       <Link to="/profile" className="auth-button" onClick={onNavigate} aria-label="Your profile">
-        <User size={22} />
+        <User size={24} strokeWidth={1.8} color="white"/>
       </Link>
     )
   }

@@ -34,16 +34,7 @@
   height: var(--header-height);
   border-bottom: 1px solid var(--color-border);
 
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-    opacity: 0.6;
-  }
+  
 
   @media (max-width: 900px) {
     height: var(--header-height-mobile);
@@ -438,7 +429,9 @@
     border: none;
     color: var(--color-text);
     cursor: pointer;
-    padding: 12px;
+    padding: 5px;
+    width: 40px;
+    height: 40px;
     transition: .4s ease;
     &:hover {
       color: var(--color-primary);
@@ -728,12 +721,24 @@
 .auth-button {
   display: flex;
   align-items: center;
-  color: var(--color-text);
+  color: white;
+  background-color: var(--color-primary);
+  border-radius: 50%;
   text-decoration: none;
-  padding: 6px;
-
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .4s ease;
   &:hover {
-    color: var(--color-primary);
+    box-shadow: 1px 1px 5px 1px var(--color-primary);
+    transition: .4s ease;
+  }
+  &:active{
+    transform: scale(.9);
+    transition: .4s ease;
   }
 }
 
@@ -753,9 +758,10 @@
     color: var(--color-text);
     cursor: pointer;
     padding: 6px;
-
+    transition: .4s ease;
     &:hover {
       color: var(--color-primary);
+      transition: .4s ease;
     }
   }
 
@@ -773,6 +779,10 @@
     flex-direction: column;
     gap: 2px;
     z-index: 10;
+    animation: header-fade-in .4s forwards ease;
+    &--closing{
+      animation: header-fade-out .4s forwards ease;
+    }
   }
 
   &__item {

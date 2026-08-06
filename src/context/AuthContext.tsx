@@ -9,6 +9,7 @@ type User = {
   idNumber: string | null
   phone: string | null
 }
+
 type AuthState = {
   error: null | string
   loading: boolean

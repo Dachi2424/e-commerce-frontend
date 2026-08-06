@@ -24,32 +24,34 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Header />
-        <Suspense fallback={<div className='app__suspense-loader'></div>}>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/auth' element={<Auth />} />
-            <Route path='/products' element={<Products />} />
-            <Route path='/products/:id' element={<Details />} />
-            <Route path='/checkout' element={<Checkout />} />
+        <div className='body-wrapper'>
+          <Header />
+          <Suspense fallback={<div className='app__suspense-loader'></div>}>
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/auth' element={<Auth />} />
+              <Route path='/products' element={<Products />} />
+              <Route path='/products/:id' element={<Details />} />
+              <Route path='/checkout' element={<Checkout />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path='/admin/products' element={<AdminProducts/>} />
-              <Route path='/admin/products/new' element={<ProductForm/>} />
-              <Route path='/admin/products/:id/edit' element={<ProductForm/>} />
-            </Route>
-
-            <Route element={<ProtectedRoute requireAdmin />}>
-              <Route path='/profile' element={<ProfileLayout/>}>
-                <Route path="personal-info" element={<PersonalInfo />} />
-                <Route path="account" element={<Account />} />
-                <Route path="orders" element={<Orders />} />
-                <Route path="orders/:id" element={<OrderDetail />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path='/admin/products' element={<AdminProducts/>} />
+                <Route path='/admin/products/new' element={<ProductForm/>} />
+                <Route path='/admin/products/:id/edit' element={<ProductForm/>} />
               </Route>
-            </Route>
-          </Routes>
-        </Suspense>
-        <Footer />
+
+              <Route element={<ProtectedRoute requireAdmin />}>
+                <Route path='/profile' element={<ProfileLayout/>}>
+                  <Route path="personal-info" element={<PersonalInfo />} />
+                  <Route path="account" element={<Account />} />
+                  <Route path="orders" element={<Orders />} />
+                  <Route path="orders/:id" element={<OrderDetail />} />
+                </Route>
+              </Route>
+            </Routes>
+          </Suspense>
+          <Footer />
+        </div>
       </BrowserRouter>
     </>
   )
