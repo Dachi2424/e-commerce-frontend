@@ -242,9 +242,8 @@
 .search-bar {
   position: relative;
   flex: 1;
-  max-width: 420px;
+  max-width: 600px;
   z-index: 2;
-
 
   &__input-wrap {
     display: flex;
@@ -254,11 +253,11 @@
     border-radius: 999px;
     padding: 0 4px 0 16px;
     height: 42px;
-    transition: .4s ease;
+    transition: 0.4s ease;
+
     &:focus-within {
       border-color: var(--color-accent);
       box-shadow: 0 0 0 3px rgba(47, 143, 224, 0.15);
-      transition: .4s ease;
     }
   }
 
@@ -295,20 +294,28 @@
   }
 
   &__results {
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: calc(var(--header-height) + 10px);
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 950px;
+    max-width: 95vw;
+
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: 10px;
+    border-radius: 30px;
     box-shadow: 0 12px 32px rgba(21, 76, 121, 0.12);
-    max-height: 340px;
-    overflow-y: auto;
+
+    height: 400px;
     padding: 6px;
-    animation: header-fade-in .4s forwards ease;
-    &--closing{
-      animation: header-fade-out .4s forwards ease;
+    overflow: hidden;
+
+    animation: header-fade-in 0.4s forwards ease;
+
+    &--closing {
+      animation: header-fade-out 0.4s forwards ease;
     }
   }
 
@@ -318,6 +325,62 @@
     font-size: 13px;
     color: var(--color-muted);
     text-align: center;
+  }
+
+  &__main-container {
+    padding: 12px 20px;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 20px;
+  }
+
+  &__left-side {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    padding-right: 8px;
+    overflow: hidden;
+    border-right: 1px solid var(--color-border);
+  }
+
+  &__category-text {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 16px;
+    flex-shrink: 0;
+  }
+
+  &__category-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  &__category {
+    cursor: pointer;
+    padding: 6px 0;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  &__right-side {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   &__result-item {
@@ -331,6 +394,7 @@
     border-radius: 8px;
     cursor: pointer;
     text-align: left;
+    flex-shrink: 0;
 
     &:hover {
       background: var(--color-bg);

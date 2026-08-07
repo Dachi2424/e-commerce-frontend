@@ -73,7 +73,7 @@ function ProductGrid({ products, loading, error }: Props) {
               className="product-grid__card-image"
             />
             <div className="product-grid__card-info">
-              <span className="product-grid__card-category">{product.category}</span>
+              
               <span className="product-grid__card-name">{product.name}</span>
               <span className="product-grid__card-price">${product.price}</span>
               {outOfStock && <span className="product-grid__card-out-of-stock">Out of stock</span>}

@@ -108,7 +108,7 @@ function Header() {
         </div>
 
         <div className="mobile-drawer__footer">
-          <CartPreview count={cartCount} mobile onNavigate={closeMobileMenu} />
+          <CartPreview count={cartCount} mobile onNavigate={closeMobileMenu}/>
         </div>
       </div>
 

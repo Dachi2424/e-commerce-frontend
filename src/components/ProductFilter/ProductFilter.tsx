@@ -4,6 +4,7 @@ import SpecFilterForm, { computeDependentOptions, type SpecFilterValue, type Spe
 import { CATEGORY_SPEC_SCHEMAS } from "../../pages/ProductForm/specSchemas"
 import { CATEGORIES } from "../Header/categories"
 import type { SpecField } from "../../pages/ProductForm/specSchemas/types"
+import {BrushCleaning} from "lucide-react"
 import "./ProductFilter.scss"
 
 // Adjust these if your catalog's price range changes significantly.
@@ -126,9 +127,7 @@ function ProductFilter() {
     <aside className="product-filter">
       <div className="product-filter__header">
         <h2>Filters</h2>
-        <button type="button" className="product-filter__clear" onClick={handleClearAll}>
-          Clear all
-        </button>
+        <button type="button" className="product-filter__clear" onClick={handleClearAll}><BrushCleaning size={15} /> Clear all</button>
       </div>
 
       <div className="product-filter__section">

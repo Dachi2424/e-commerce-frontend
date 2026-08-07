@@ -39,6 +39,9 @@
   font-size: 12.5px;
   color: var(--color-primary);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 
   &:hover {
     color: var(--color-accent);

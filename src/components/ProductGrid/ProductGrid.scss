@@ -66,15 +66,23 @@
 .product-grid__card-name {
   font-family: var(--font-body);
   font-size: 14px;
+  font-weight: 600;
   color: var(--color-text);
-  white-space: nowrap;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
   overflow: hidden;
   text-overflow: ellipsis;
+
+  height: 34px;
 }
 
 .product-grid__card-price {
   font-family: var(--font-mono);
-  font-size: 14.5px;
+  font-size: 18px;
+  font-weight: 600;
   color: var(--color-text);
 }
 
