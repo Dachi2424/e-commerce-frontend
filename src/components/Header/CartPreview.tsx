@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useReducer } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react"
 import { useCart } from "../../context/CartContext"

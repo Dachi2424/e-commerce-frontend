@@ -293,12 +293,21 @@
     }
   }
 
+  // Centered with left/right/margin instead of left:50% + transform:
+  // translateX(-50%) — the fade-in/out animation below also animates
+  // `transform` (translateY), and a running CSS animation fully takes
+  // over the `transform` property for as long as it's active. A static
+  // transform set elsewhere gets silently dropped the moment the
+  // animation plays, which is why translateX(-50%) centering never
+  // survived. left/right/margin doesn't use `transform` at all, so it
+  // can't be overwritten by the animation.
   &__results {
     position: fixed;
     top: calc(var(--header-height) + 10px);
 
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
 
     width: 950px;
     max-width: 95vw;
