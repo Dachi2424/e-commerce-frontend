@@ -39,9 +39,9 @@ type Action =
 type CartContextType = {
   state: CartState,
   getCart: () => Promise<void>,
-  addToCart: (data: {productId: number, quantity: number}) => Promise<void>,
-  changeQuantity: (data: {productId: number, quantity: number}) => Promise<void>,
-  deleteItem: (data: {productId: number}) => Promise<void>,
+  addToCart: (data: { productId: number, quantity: number }) => Promise<void>,
+  changeQuantity: (data: { productId: number, quantity: number }) => Promise<void>,
+  deleteItem: (data: { productId: number }) => Promise<void>,
   clearCart: () => Promise<void>
 }
 
@@ -127,7 +127,9 @@ function CartProvider({ children }: { children: ReactNode }) {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/cart`, { withCredentials: true })
 
-      dispatch({ type: ACTIONS.GET_CART, payload: res.data.cart })
+      console.log("CART API RESPONSE:", res.data)
+
+      dispatch({ type: ACTIONS.GET_CART, payload: res.data })
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 401) {
         await refreshToken()
@@ -135,7 +137,9 @@ function CartProvider({ children }: { children: ReactNode }) {
         try {
           const res = await axios.get(`${import.meta.env.VITE_API_URL}/cart`, { withCredentials: true })
 
-          dispatch({ type: ACTIONS.GET_CART, payload: res.data.cart })
+          console.log("CART API RESPONSE AFTER REFRESH:", res.data)
+
+          dispatch({ type: ACTIONS.GET_CART, payload: res.data })
         } catch (retryErr) {
           if (isAxiosError(retryErr)) {
             dispatch({ type: ACTIONS.SET_ERROR, payload: retryErr.response?.data?.error || "Something went wrong" })
@@ -206,6 +210,7 @@ function CartProvider({ children }: { children: ReactNode }) {
 
         try {
           await axios.patch(`${import.meta.env.VITE_API_URL}/cart/${productId}`, { quantity }, { withCredentials: true })
+
           dispatch({ type: ACTIONS.UPDATE_QUANTITY, payload: { productId, quantity } })
         } catch (retryErr) {
           if (isAxiosError(retryErr)) {
@@ -214,8 +219,10 @@ function CartProvider({ children }: { children: ReactNode }) {
             dispatch({ type: ACTIONS.SET_ERROR, payload: "Something went wrong" })
           }
         }
+
         return;
       }
+
       if (isAxiosError(err)) {
         dispatch({ type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong" })
       } else {
@@ -226,12 +233,15 @@ function CartProvider({ children }: { children: ReactNode }) {
 
   async function deleteItem({ productId }: { productId: number }) {
     dispatch({ type: ACTIONS.SET_LOADING })
+
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/cart/${productId}`, { withCredentials: true })
+
       dispatch({ type: ACTIONS.DELETE_ITEM, payload: productId })
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 401) {
         await refreshToken()
+
         try {
           await axios.delete(`${import.meta.env.VITE_API_URL}/cart/${productId}`, { withCredentials: true })
 
@@ -243,8 +253,10 @@ function CartProvider({ children }: { children: ReactNode }) {
             dispatch({ type: ACTIONS.SET_ERROR, payload: "Something went wrong" })
           }
         }
+
         return;
       }
+
       if (isAxiosError(err)) {
         dispatch({ type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong" })
       } else {
@@ -255,14 +267,18 @@ function CartProvider({ children }: { children: ReactNode }) {
 
   async function clearCart() {
     dispatch({ type: ACTIONS.SET_LOADING })
+
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/cart`, { withCredentials: true })
+
       dispatch({ type: ACTIONS.CLEAR_CART })
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 401) {
         await refreshToken()
+
         try {
           await axios.delete(`${import.meta.env.VITE_API_URL}/cart`, { withCredentials: true })
+
           dispatch({ type: ACTIONS.CLEAR_CART })
         } catch (retryErr) {
           if (isAxiosError(retryErr)) {
@@ -271,8 +287,10 @@ function CartProvider({ children }: { children: ReactNode }) {
             dispatch({ type: ACTIONS.SET_ERROR, payload: "Something went wrong" })
           }
         }
+
         return;
       }
+
       if (isAxiosError(err)) {
         dispatch({ type: ACTIONS.SET_ERROR, payload: err.response?.data?.error || "Something went wrong" })
       } else {
