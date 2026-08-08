@@ -59,7 +59,7 @@ export default function Products() {
       params.set("limit", String(PAGE_SIZE))
 
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`, { params })
-      setProducts(res.data)
+      setProducts(Array.isArray(res.data) ? res.data : [])
       setTotalCount(Number(res.headers["x-total-count"]) || 0)
     } catch (err) {
       setError(isAxiosError(err) ? err.response?.data?.error || "Failed to load products" : "Failed to load products")
