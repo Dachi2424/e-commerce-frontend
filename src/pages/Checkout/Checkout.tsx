@@ -68,7 +68,7 @@ function Checkout() {
       <main className="checkout-page">
         <div className="checkout-page__status">
           <p>You need to be logged in to check out.</p>
-          <button type="button" onClick={() => navigate("/login", { state: { from: "/checkout" } })}>
+          <button type="button" onClick={() => navigate("/auth", { state: { from: "/checkout" } })}>
             Log in
           </button>
         </div>
